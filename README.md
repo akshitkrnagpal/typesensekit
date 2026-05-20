@@ -10,8 +10,8 @@ Use it when you want repeatable Typesense automation without rebuilding small sc
 
 ## What You Get
 
-- `@typesensekit/cli`: a `tsk` command for profile-aware Typesense operations, raw API calls, and agent config snippets.
-- `@typesensekit/mcp`: an MCP stdio server that exposes Typesense operations as tools for compatible agents.
+- [`@typesensekit/cli`](https://www.npmjs.com/package/@typesensekit/cli): a `tsk` command for profile-aware Typesense operations, raw API calls, and agent config snippets.
+- [`@typesensekit/mcp`](https://www.npmjs.com/package/@typesensekit/mcp): an MCP stdio server that exposes Typesense operations as tools for compatible agents.
 - `@typesensekit/core`: the private shared client, operation registry, validation layer, and redaction utilities used by both public packages.
 
 ## Quick Start
