@@ -1,4 +1,5 @@
 import { defineCommand, runMain } from "citty";
+import packageJson from "../package.json" with { type: "json" };
 import { listOperations, operationCommands } from "./operations.js";
 import { profileCommand } from "./profile/commands.js";
 import { renderSkill, type SkillTarget } from "./skills.js";
@@ -6,7 +7,7 @@ import { renderSkill, type SkillTarget } from "./skills.js";
 export const main = defineCommand({
   meta: {
     name: "typesensekit",
-    version: "0.0.0",
+    version: packageJson.version,
     description: "CLI for Typesense Admin API operations",
   },
   subCommands: {
