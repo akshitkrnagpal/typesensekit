@@ -101,6 +101,11 @@ tsk skills hermes
 For scoped key examples, production guidance, and the compatibility matrix, read
 [`docs/mcp-security.md`](./docs/mcp-security.md).
 
+For Streamable HTTP, Docker, and deployment examples, read
+[`docs/mcp-http-docker.md`](./docs/mcp-http-docker.md). For an end-to-end
+assistant search flow with citations, read
+[`examples/assistant-search-citations.md`](./examples/assistant-search-citations.md).
+
 The MCP server also exposes resources:
 
 | Resource | Purpose |
