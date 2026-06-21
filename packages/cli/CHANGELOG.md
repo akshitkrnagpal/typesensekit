@@ -1,5 +1,12 @@
 # @typesensekit/cli
 
+## 1.1.2
+
+### Patch Changes
+
+- b81defe: Document scoped API key guidance, production MCP operations, and compatibility notes.
+- 0ea7132: Add document batch retrieval, facet exploration, and search suggestion helper operations.
+
 ## 1.1.1
 
 ### Patch Changes
