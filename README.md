@@ -101,6 +101,15 @@ tsk skills hermes
 For scoped key examples, production guidance, and the compatibility matrix, read
 [`docs/mcp-security.md`](./docs/mcp-security.md).
 
+The MCP server also exposes resources:
+
+| Resource | Purpose |
+| --- | --- |
+| `typesensekit://operations` | JSON manifest of operations exposed by the current MCP mode |
+| `typesensekit://read-only-tools` | JSON list of tools included in default read-only mode |
+| `typesense://collections/{collection}/schema` | Collection schema lookup |
+| `typesense://collections/{collection}/documents/{id}` | Document lookup |
+
 ## API Coverage
 
 TypesenseKit covers the common Typesense administration and search surfaces, plus `api.call` for endpoints that are new, uncommon, or not yet wrapped.

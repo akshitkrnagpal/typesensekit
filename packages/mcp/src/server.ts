@@ -9,6 +9,7 @@ import type { z } from "zod";
 import packageJson from "../package.json" with { type: "json" };
 import { readEnvConfig, readMcpOptions } from "./env.js";
 import { filterMcpOperations } from "./read-only.js";
+import { registerTypesenseResources } from "./resources.js";
 
 type ToolShape = z.ZodObject<z.ZodRawShape>;
 
@@ -31,10 +32,16 @@ export function createTypesenseMcpServer(
   const client = createClient(readEnvConfig());
   const mcpOptions = { ...readMcpOptions(), ...options };
 
-  for (const operation of filterMcpOperations(
-    operations,
+  const activeOperations = filterMcpOperations(operations, mcpOptions.readOnly);
+
+  registerTypesenseResources(
+    server,
+    client,
+    activeOperations,
     mcpOptions.readOnly,
-  )) {
+  );
+
+  for (const operation of activeOperations) {
     server.registerTool(
       operation.name,
       {
