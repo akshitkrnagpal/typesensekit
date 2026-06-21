@@ -9,5 +9,11 @@ TYPESENSE_URL=http://localhost:8108 TYPESENSE_API_KEY=xyz pnpm dlx @typesensekit
 
 Set `TYPESENSEKIT_READ_ONLY=false` to expose write/delete/admin tools.
 
+Run the stateless Streamable HTTP server:
+
+```sh
+TYPESENSE_URL=http://localhost:8108 TYPESENSE_API_KEY=xyz pnpm dlx --package @typesensekit/mcp typesensekit-mcp-http
+```
+
 See the root README for client configuration, MCP resources, security guidance,
 and operation coverage.
