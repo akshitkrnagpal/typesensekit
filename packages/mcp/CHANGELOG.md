@@ -1,5 +1,15 @@
 # @typesensekit/mcp
 
+## 1.1.2
+
+### Patch Changes
+
+- b81defe: Document scoped API key guidance, production MCP operations, and compatibility notes.
+- 914695b: Add a stateless Streamable HTTP MCP entrypoint plus Docker and end-to-end assistant search documentation.
+- 1175037: Expose MCP resources for operation discovery, read-only tool discovery, collection schemas, and document lookup.
+- 0ea7132: Add document batch retrieval, facet exploration, and search suggestion helper operations.
+- be5d62d: Default MCP tools to read-only mode with an explicit opt out for write/admin operations.
+
 ## 1.1.1
 
 ### Patch Changes
