@@ -41,7 +41,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "description": "MCP stdio server exposing Typesense API operations as tools.",
+  "description": "Open-source Typesense MCP server for secure search and cluster operations from AI agents.",
   "license": "MIT",
   "author": "Akshit Kr Nagpal",
   "repository": {
@@ -52,12 +52,17 @@
   "bugs": {
     "url": "https://github.com/akshitkrnagpal/typesensekit/issues"
   },
-  "homepage": "https://github.com/akshitkrnagpal/typesensekit#readme",
+  "homepage": "https://typesensekit.vercel.app/typesense-mcp/",
   "keywords": [
     "typesense",
-    "cli",
+    "typesense-mcp",
     "mcp",
+    "mcp-server",
     "model-context-protocol",
+    "ai-agents",
+    "claude",
+    "codex",
+    "cursor",
     "search"
   ]
 }

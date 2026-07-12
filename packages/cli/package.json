@@ -38,7 +38,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "description": "Typesense API CLI with profile management and agent skill snippets.",
+  "description": "Open-source Typesense CLI for collections, documents, schemas, search, and cluster administration.",
   "license": "MIT",
   "author": "Akshit Kr Nagpal",
   "repository": {
@@ -49,12 +49,15 @@
   "bugs": {
     "url": "https://github.com/akshitkrnagpal/typesensekit/issues"
   },
-  "homepage": "https://github.com/akshitkrnagpal/typesensekit#readme",
+  "homepage": "https://typesensekit.vercel.app/typesense-cli/",
   "keywords": [
     "typesense",
+    "typesense-cli",
     "cli",
-    "mcp",
-    "model-context-protocol",
-    "search"
+    "command-line",
+    "search",
+    "search-engine",
+    "cluster-administration",
+    "automation"
   ]
 }
