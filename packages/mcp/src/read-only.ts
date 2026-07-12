@@ -30,6 +30,8 @@ export const READ_ONLY_OPERATION_NAMES = new Set([
   "search.facets",
   "search.suggestions",
   "stats",
+  "stemming.dictionaries.list",
+  "stemming.dictionaries.retrieve",
   "stopwords.list",
   "stopwords.retrieve",
   "synonym_sets.items.list",

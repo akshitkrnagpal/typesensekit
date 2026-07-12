@@ -24,6 +24,7 @@ describe("operation registry", () => {
         "synonym_sets.items.list",
         "curation_sets.list",
         "curation_sets.items.upsert",
+        "stemming.dictionaries.import",
         "api.call",
         "health",
       ]),
