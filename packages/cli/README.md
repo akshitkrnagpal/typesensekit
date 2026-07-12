@@ -17,6 +17,9 @@ tsk profile test production
 tsk profile export production > profile.json       # omits plaintext keys
 tsk profile export production --reveal > backup.json
 tsk profile import backup.json
+
+Operation results use readable tables where possible. Pass `--json` for stable,
+redacted JSON output in scripts.
 tsk collections.list --input '{}'
 tsk skills mcp
 ```
