@@ -108,6 +108,19 @@ const EXAMPLES: Record<string, JsonValue[]> = {
       },
     },
   ],
+  "operations.snapshot": [
+    {
+      snapshotPath: "/var/backups/typesense",
+    },
+  ],
+  "operations.slow_requests.configure": [
+    {
+      thresholdMs: 2000,
+    },
+    {
+      thresholdMs: -1,
+    },
+  ],
   "search.facets": [
     {
       collection: "products",

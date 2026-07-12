@@ -26,6 +26,7 @@ export const READ_ONLY_OPERATION_NAMES = new Set([
   "nl_search_models.retrieve",
   "overrides.list",
   "overrides.retrieve",
+  "operations.schema_changes",
   "presets.list",
   "presets.retrieve",
   "search",

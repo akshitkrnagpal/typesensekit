@@ -26,6 +26,8 @@ describe("operation registry", () => {
         "curation_sets.items.upsert",
         "stemming.dictionaries.import",
         "nl_search_models.create",
+        "operations.schema_changes",
+        "operations.snapshot",
         "api.call",
         "health",
       ]),
