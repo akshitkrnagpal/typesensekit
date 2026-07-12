@@ -1,0 +1,52 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+
+interface Link {
+  href: string;
+  label: string;
+}
+
+interface Props {
+  title: string;
+  description: string;
+  eyebrow: string;
+  toc: Link[];
+  previous?: Link;
+  next?: Link;
+}
+
+const { title, description, eyebrow, toc, previous, next } = Astro.props;
+---
+
+<BaseLayout title={`${title} — TypesenseKit`} description={description} guide>
+  <div class="guide-hero page-shell">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="/">Home</a><span aria-hidden="true">/</span><a href="/guides/clients/">Guides</a><span aria-hidden="true">/</span><span>{eyebrow}</span>
+    </nav>
+    <p class="eyebrow">{eyebrow}</p>
+    <h1>{title}</h1>
+    <p class="guide-lede">{description}</p>
+  </div>
+  <div class="guide-grid page-shell">
+    <aside class="guide-toc">
+      <p>On this page</p>
+      <nav aria-label="Table of contents">
+        {toc.map((item) => <a href={item.href}>{item.label}</a>)}
+      </nav>
+    </aside>
+    <article class="guide-content">
+      <slot />
+      <nav class="guide-pager" aria-label="Guide navigation">
+        {previous ? <a href={previous.href}><span>Previous</span>{previous.label}</a> : <span></span>}
+        {next ? <a class="next" href={next.href}><span>Next</span>{next.label}</a> : <span></span>}
+      </nav>
+      <aside class="guide-star">
+        <div>
+          <p class="eyebrow">Useful in your workflow?</p>
+          <h2>Help more Typesense developers find it.</h2>
+        </div>
+        <a class="button primary" href="https://github.com/akshitkrnagpal/typesensekit">Star on GitHub <span aria-hidden="true">★</span></a>
+      </aside>
+    </article>
+  </div>
+</BaseLayout>

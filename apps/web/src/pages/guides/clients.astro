@@ -1,0 +1,79 @@
+---
+import CopyCode from "../../components/CopyCode.astro";
+import GuideLayout from "../../layouts/GuideLayout.astro";
+
+const genericConfig = `{
+  "mcpServers": {
+    "typesensekit": {
+      "command": "npx",
+      "args": ["-y", "@typesensekit/mcp"],
+      "env": {
+        "TYPESENSE_URL": "https://your-cluster.typesense.net",
+        "TYPESENSE_API_KEY": "your-scoped-api-key"
+      }
+    }
+  }
+}`;
+
+const toc = [
+  { href: "#before", label: "Before you connect" },
+  { href: "#claude-desktop", label: "Claude Desktop" },
+  { href: "#claude-code", label: "Claude Code" },
+  { href: "#codex", label: "Codex" },
+  { href: "#cursor", label: "Cursor" },
+  { href: "#generic", label: "Generic MCP" },
+  { href: "#verify", label: "Verify setup" },
+];
+---
+
+<GuideLayout
+  title="Connect your AI client"
+  description="Copy a supported stdio configuration for Claude Desktop, Claude Code, Codex, Cursor, or another MCP-compatible client."
+  eyebrow="Client setup"
+  {toc}
+  previous={{ href: "/guides/mcp/", label: "Understand MCP access" }}
+>
+  <h2 id="before">Before you connect</h2>
+  <p>You need Node.js 22.11 or newer, your Typesense cluster URL, and an API key. Use a search-only or otherwise scoped key whenever possible.</p>
+  <div class="callout"><strong>All examples preserve the safe default.</strong> They do not set <code>TYPESENSEKIT_READ_ONLY=false</code>, so write, delete, key-management, and raw API tools remain hidden.</div>
+
+  <h2 id="claude-desktop">Claude Desktop</h2>
+  <p>Add the server to Claude Desktop's MCP configuration, replace both placeholder values, save, and restart Claude Desktop.</p>
+  <CopyCode code={genericConfig} language="json" label="claude_desktop_config.json" />
+  <p>You can generate the same configuration from the CLI.</p>
+  <CopyCode code="tsk skills claude-desktop" />
+
+  <h2 id="claude-code">Claude Code</h2>
+  <p>Add the stdio server with Claude Code's MCP command, then make the Typesense variables available in your shell or MCP environment.</p>
+  <CopyCode code={"export TYPESENSE_URL=https://your-cluster.typesense.net\nexport TYPESENSE_API_KEY=your-scoped-api-key\nclaude mcp add typesensekit -- npx -y @typesensekit/mcp"} />
+  <p>TypesenseKit can print this command for you with <code>tsk skills claude-code</code>. Run <code>claude mcp list</code> to confirm the server is registered.</p>
+
+  <h2 id="codex">Codex</h2>
+  <p>Codex CLI, the IDE extension, and the ChatGPT desktop app share MCP configuration. Add this to <code>~/.codex/config.toml</code>, or use <code>.codex/config.toml</code> inside a trusted project.</p>
+  <CopyCode code={'[mcp_servers.typesensekit]\ncommand = "npx"\nargs = ["-y", "@typesensekit/mcp"]\nenv_vars = ["TYPESENSE_URL", "TYPESENSE_API_KEY"]\ndefault_tools_approval_mode = "writes"'} language="toml" label="config.toml" />
+  <p>Export the variables before starting Codex. The <code>writes</code> approval mode complements TypesenseKit's MCP annotations if you later enable write tools.</p>
+  <CopyCode code={"export TYPESENSE_URL=https://your-cluster.typesense.net\nexport TYPESENSE_API_KEY=your-scoped-api-key\ncodex mcp list"} />
+  <p>See the <a href="https://learn.chatgpt.com/docs/extend/mcp">official Codex MCP guide</a> for configuration scope and additional tool policies.</p>
+
+  <h2 id="cursor">Cursor</h2>
+  <p>Create <code>.cursor/mcp.json</code> in a project for project-scoped access, or add the same server through Cursor's MCP settings. Replace the placeholder connection values.</p>
+  <CopyCode code={genericConfig} language="json" label=".cursor/mcp.json" />
+  <p>Restart or refresh Cursor's MCP servers after changing the file. The server should appear as <strong>typesensekit</strong> with read-only tools.</p>
+
+  <h2 id="generic">Any stdio-compatible MCP client</h2>
+  <p>Use the generic JSON configuration when a client accepts the common <code>mcpServers</code> shape.</p>
+  <CopyCode code={genericConfig} language="json" label="MCP configuration" />
+  <p>Or generate it locally:</p>
+  <CopyCode code="tsk skills mcp" />
+  <p>If your client uses a different configuration envelope, preserve the command, arguments, and environment values shown above.</p>
+
+  <h2 id="verify">Verify the connection</h2>
+  <ol>
+    <li>Restart or refresh the client after saving the configuration.</li>
+    <li>Inspect its MCP server list and confirm TypesenseKit connects without an initialization error.</li>
+    <li>Ask the client to list Typesense collections or check cluster health.</li>
+    <li>Confirm write and delete tools are absent in the default mode.</li>
+  </ol>
+  <CopyCode code={"List my Typesense collections and summarize their document counts.\nDo not modify the cluster."} label="Example prompt" />
+  <p>If startup fails, run the package directly in a terminal with the same environment first. That separates Node/package issues from client configuration issues.</p>
+</GuideLayout>

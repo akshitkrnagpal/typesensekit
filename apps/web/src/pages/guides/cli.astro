@@ -1,0 +1,65 @@
+---
+import CopyCode from "../../components/CopyCode.astro";
+import GuideLayout from "../../layouts/GuideLayout.astro";
+
+const toc = [
+  { href: "#install", label: "Install" },
+  { href: "#profiles", label: "Secure profiles" },
+  { href: "#environment", label: "Environment only" },
+  { href: "#discover", label: "Discover operations" },
+  { href: "#output", label: "Output and scripts" },
+  { href: "#completion", label: "Shell completion" },
+  { href: "#destructive", label: "Destructive operations" },
+];
+---
+
+<GuideLayout
+  title="Operate Typesense from your terminal"
+  description="Install the CLI, connect securely, discover operation inputs, and move between readable terminal output and stable JSON automation."
+  eyebrow="CLI guide"
+  {toc}
+  next={{ href: "/guides/mcp/", label: "Connect an AI agent" }}
+>
+  <h2 id="install">Install the CLI</h2>
+  <p>TypesenseKit requires Node.js 22.11 or newer. Install the public package globally with your preferred package manager.</p>
+  <CopyCode code="pnpm add -g @typesensekit/cli" label="pnpm" />
+  <p>Confirm the command is available by listing the operation registry.</p>
+  <CopyCode code="tsk operations" />
+
+  <h2 id="profiles">Create a secure profile</h2>
+  <p>A profile stores a Typesense URL and credential reference so you do not have to repeat connection details. The interactive form prompts for the API key without putting it in shell history.</p>
+  <CopyCode code={"tsk profile add local --url http://localhost:8108\ntsk profile use local\ntsk profile test local"} />
+  <p>On macOS, ask TypesenseKit to keep the key in Keychain rather than the profile configuration file.</p>
+  <CopyCode code="tsk profile add production --url https://search.example.com --keychain" />
+  <div class="callout"><strong>Use the narrowest key that works.</strong> Search-only workflows should use a scoped search key instead of an admin key.</div>
+
+  <h2 id="environment">Run without a saved profile</h2>
+  <p>For CI and short-lived environments, provide the connection through environment variables.</p>
+  <CopyCode code={"TYPESENSE_URL=http://localhost:8108 \\\nTYPESENSE_API_KEY=xyz \\\ntsk health --input '{}'"} />
+  <p>For a scripted profile setup, pipe the key over stdin so it does not appear in process arguments or shell history.</p>
+  <CopyCode code={"printf '%s' \"$TYPESENSE_API_KEY\" | \\\ntsk profile add ci --url https://search.example.com --api-key-stdin"} />
+
+  <h2 id="discover">Discover operation inputs</h2>
+  <p>Operation names stay the same across the CLI and MCP server. Inspect the validation schema or generated examples before sending a request.</p>
+  <CopyCode code={"tsk documents.search --schema\ntsk documents.search --examples"} />
+  <p>Search parameters belong in the top-level <code>params</code> object.</p>
+  <CopyCode code={'tsk documents.search --input \'{"collection":"products","params":{"q":"oak chair","query_by":"title"}}\' --json'} label="search" />
+  <p>See the <a href="https://github.com/akshitkrnagpal/typesensekit/blob/main/docs/api-coverage.md">generated API coverage</a> for the complete operation inventory.</p>
+
+  <h2 id="output">Choose output for humans or scripts</h2>
+  <p>Common operation results render as readable tables in a terminal. Add <code>--json</code> for stable, redacted JSON that can be piped into another command.</p>
+  <CopyCode code={"tsk collections.list --input '{}'\ntsk collections.list --input '{}' --json | jq '.[].name'"} />
+  <p>Input can also come from a JSON file for large imports or reusable operation payloads.</p>
+  <CopyCode code="tsk documents.import --input import.json --json" />
+
+  <h2 id="completion">Enable shell completion</h2>
+  <p>Generate completion definitions from the current command and operation registry.</p>
+  <CopyCode code={"# zsh\nsource <(tsk completion zsh)\n\n# bash\nsource <(tsk completion bash)\n\n# fish\ntsk completion fish | source"} />
+
+  <h2 id="destructive">Treat destructive operations deliberately</h2>
+  <p>The CLI asks for confirmation before destructive requests. This makes interactive administration harder to trigger accidentally.</p>
+  <CopyCode code={'tsk collections.delete --input \'{"collection":"old_products"}\''} />
+  <p>Use <code>--yes</code> only in automation where the target and failure behavior are already controlled.</p>
+  <CopyCode code={'tsk collections.delete --input \'{"collection":"old_products"}\' --yes --json'} />
+  <div class="callout"><strong>Next:</strong> connect the same registry to an AI client through the read-only MCP server.</div>
+</GuideLayout>

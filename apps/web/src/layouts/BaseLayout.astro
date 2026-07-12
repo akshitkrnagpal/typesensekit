@@ -1,0 +1,102 @@
+---
+import "../styles/global.css";
+
+interface Props {
+  title?: string;
+  description?: string;
+  path?: string;
+  guide?: boolean;
+}
+
+const {
+  title = "TypesenseKit — Typesense CLI and MCP server",
+  description = "Operate Typesense from your terminal or AI agent with one typed CLI and MCP operation registry.",
+  path = Astro.url.pathname,
+  guide = false,
+} = Astro.props;
+const canonical = new URL(path, Astro.site);
+const socialImage = new URL("/images/github-og.png", Astro.site);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="theme-color" content="#071013" />
+    <meta name="description" content={description} />
+    <link rel="icon" href="/images/github-og.png" type="image/png" />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="TypesenseKit" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={socialImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={socialImage} />
+    <title>{title}</title>
+  </head>
+  <body class:list={{ "guide-page": guide }}>
+    <a class="skip-link" href="#main-content">Skip to content</a>
+    <header class="site-header">
+      <nav class="nav-shell" aria-label="Primary navigation">
+        <a class="brand" href="/" aria-label="TypesenseKit home">
+          <span class="brand-mark" aria-hidden="true">⌕</span>
+          <span>Typesense<span>Kit</span></span>
+        </a>
+        <div class="nav-links">
+          <a href={guide ? "/#product" : "#product"}>Product</a>
+          <a href="/guides/cli/">CLI</a>
+          <a href="/guides/mcp/">MCP</a>
+          <a href="/guides/clients/">Guides</a>
+          <a class="nav-github" href="https://github.com/akshitkrnagpal/typesensekit">GitHub <span aria-hidden="true">↗</span></a>
+        </div>
+      </nav>
+    </header>
+    <main id="main-content">
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <div class="footer-shell">
+        <div>
+          <a class="brand footer-brand" href="/">
+            <span class="brand-mark" aria-hidden="true">⌕</span>
+            <span>Typesense<span>Kit</span></span>
+          </a>
+          <p>One toolkit for Typesense operators and AI agents.</p>
+        </div>
+        <div class="footer-links" aria-label="Project links">
+          <a href="https://www.npmjs.com/package/@typesensekit/cli">CLI on npm</a>
+          <a href="https://www.npmjs.com/package/@typesensekit/mcp">MCP on npm</a>
+          <a href="https://github.com/akshitkrnagpal/typesensekit/releases">Releases</a>
+          <a href="https://github.com/akshitkrnagpal/typesensekit/blob/main/CONTRIBUTING.md">Contributing</a>
+          <a href="https://github.com/akshitkrnagpal/typesensekit/blob/main/LICENSE">MIT License</a>
+        </div>
+      </div>
+      <div class="footer-base">
+        <span>Built for the Typesense community.</span>
+        <span>CLI + MCP · Open source</span>
+      </div>
+    </footer>
+    <div class="sr-only" aria-live="polite" id="copy-status"></div>
+    <script>
+      const status = document.querySelector<HTMLElement>("#copy-status");
+      document.querySelectorAll<HTMLButtonElement>("[data-copy-code]").forEach((button) => {
+        button.addEventListener("click", async () => {
+          const code = button.closest(".code-block")?.querySelector("code")?.textContent ?? "";
+          await navigator.clipboard.writeText(code);
+          const label = button.querySelector("span");
+          if (label) label.textContent = "Copied";
+          if (status) status.textContent = "Code copied to clipboard";
+          window.setTimeout(() => {
+            if (label) label.textContent = "Copy";
+          }, 1800);
+        });
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,67 @@
+---
+import CopyCode from "../../components/CopyCode.astro";
+import GuideLayout from "../../layouts/GuideLayout.astro";
+
+const toc = [
+  { href: "#start", label: "Start with stdio" },
+  { href: "#read-only", label: "Read-only default" },
+  { href: "#full-access", label: "Full access" },
+  { href: "#resources", label: "MCP resources" },
+  { href: "#http", label: "HTTP and Docker" },
+  { href: "#registry", label: "Registry" },
+  { href: "#production", label: "Production safety" },
+];
+---
+
+<GuideLayout
+  title="Connect AI agents to Typesense safely"
+  description="Run TypesenseKit over MCP with read-only defaults, explicit access expansion, and the same validated operations available in the CLI."
+  eyebrow="MCP guide"
+  {toc}
+  previous={{ href: "/guides/cli/", label: "Operate with the CLI" }}
+  next={{ href: "/guides/clients/", label: "Configure an MCP client" }}
+>
+  <h2 id="start">Start the stdio server</h2>
+  <p>Compatible MCP clients can launch the package directly from npm. Provide the Typesense URL and a suitably scoped API key in the server environment.</p>
+  <CopyCode code={"TYPESENSE_URL=http://localhost:8108 \\\nTYPESENSE_API_KEY=xyz \\\npnpm dlx @typesensekit/mcp"} />
+  <p>The process communicates over stdio, so your client should own its lifecycle and send MCP messages through standard input and output.</p>
+
+  <h2 id="read-only">Read-only is the default</h2>
+  <p>TypesenseKit exposes search, document reads, collection metadata, configuration reads, and system status operations by default. Write, delete, key-management, and raw API tools stay hidden.</p>
+  <div class="callout"><strong>No flag is required.</strong> An unset <code>TYPESENSEKIT_READ_ONLY</code> value is interpreted as read-only.</div>
+  <p>This is the recommended mode for assistant search, support investigation, relevance debugging, and cluster inspection.</p>
+
+  <h2 id="full-access">Opt in to full access</h2>
+  <p>Set <code>TYPESENSEKIT_READ_ONLY=false</code> only when an agent must mutate data or administer the cluster.</p>
+  <CopyCode code={"TYPESENSEKIT_READ_ONLY=false \\\nTYPESENSE_URL=http://localhost:8108 \\\nTYPESENSE_API_KEY=xyz \\\npnpm dlx @typesensekit/mcp"} />
+  <p>Full mode includes document writes, destructive operations, key management, and <code>api.call</code>. The MCP host—not the server—decides how and when to ask the user for tool approval.</p>
+
+  <h2 id="resources">Use MCP resources</h2>
+  <p>In addition to tools, the server exposes resources that help clients inspect the current operation surface and fetch Typesense records directly.</p>
+  <ul>
+    <li><code>typesensekit://operations</code> — manifest for operations active in the current mode.</li>
+    <li><code>typesensekit://read-only-tools</code> — names available in the safe default mode.</li>
+    <li><code>typesense://collections/&#123;collection&#125;/schema</code> — collection schema.</li>
+    <li><code>typesense://collections/&#123;collection&#125;/documents/&#123;id&#125;</code> — one document.</li>
+  </ul>
+
+  <h2 id="http">Run Streamable HTTP or Docker</h2>
+  <p>For a stateless HTTP transport, use the package's dedicated binary.</p>
+  <CopyCode code={"TYPESENSE_URL=http://localhost:8108 \\\nTYPESENSE_API_KEY=xyz \\\npnpm dlx --package @typesensekit/mcp typesensekit-mcp-http"} />
+  <p>The repository also includes a production-oriented Dockerfile and deployment guidance. Follow the <a href="https://github.com/akshitkrnagpal/typesensekit/blob/main/docs/mcp-http-docker.md">HTTP and Docker guide</a> for health checks, origins, host/port configuration, and container examples.</p>
+
+  <h2 id="registry">Find TypesenseKit in the MCP Registry</h2>
+  <p>The package includes verified registry metadata under <code>io.github.akshitkrnagpal/typesensekit</code>. The registry entry points clients to the public npm package and its required environment variables.</p>
+  <CopyCode code={'curl "https://registry.modelcontextprotocol.io/v0.1/servers?search=io.github.akshitkrnagpal/typesensekit"'} />
+
+  <h2 id="production">Production safety checklist</h2>
+  <ul>
+    <li>Keep read-only mode enabled for assistant-facing deployments.</li>
+    <li>Use a scoped Typesense key and separate keys for separate workloads.</li>
+    <li>Treat document exports as sensitive even though they are read-only.</li>
+    <li>Do not expose the HTTP transport publicly without authentication and network controls.</li>
+    <li>Keep <code>api.call</code> unavailable unless the workflow genuinely needs unwrapped endpoints.</li>
+    <li>Set explicit connection timeouts and monitor tool calls in the MCP host.</li>
+  </ul>
+  <p>Read the full <a href="https://github.com/akshitkrnagpal/typesensekit/blob/main/docs/mcp-security.md">MCP security and operations guide</a> before enabling production access.</p>
+</GuideLayout>
