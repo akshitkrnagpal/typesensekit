@@ -43,4 +43,36 @@ describe("cli output", () => {
       '{\n  "embed": {\n    "model_config": {\n      "api_key": "[REDACTED]"\n    }\n  }\n}',
     );
   });
+
+  it("renders a flat object as key/value rows", () => {
+    expect(render({ ok: true, code: 200 })).toBe(
+      "key   value\n----  -----\nok    true\ncode  200",
+    );
+  });
+
+  it("renders flat arrays as aligned tables", () => {
+    expect(
+      render([
+        { name: "books", count: 2 },
+        { name: "longer-name", count: 10 },
+      ]),
+    ).toBe(
+      "name         count\n-----------  -----\nbooks        2\nlonger-name  10",
+    );
+  });
+
+  it("keeps JSON mode machine-readable and redacted", () => {
+    const output = render([{ name: "books", api_key: "secret" }], true);
+    expect(JSON.parse(output)).toEqual([
+      { name: "books", api_key: "[REDACTED]" },
+    ]);
+  });
+
+  it("escapes newlines inside table cells", () => {
+    expect(render([{ message: "first\nsecond" }])).toContain("first\\nsecond");
+  });
+
+  it("renders empty arrays clearly", () => {
+    expect(render([])).toBe("No results.");
+  });
 });
