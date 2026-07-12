@@ -4,6 +4,54 @@ import type { Operation } from "./types.js";
 
 export const systemOperations = [
   {
+    name: "operations.schema_changes",
+    summary: "List in-progress collection schema changes",
+    category: "system",
+    input: z.object({}),
+    execute: async (client) => api(client).get("/operations/schema_changes"),
+  },
+  {
+    name: "operations.snapshot",
+    summary: "Create a point-in-time server snapshot",
+    category: "system",
+    input: z.object({ snapshotPath: z.string().min(1) }),
+    execute: async (client, input) =>
+      api(client).post("/operations/snapshot", undefined, {
+        snapshot_path: input.snapshotPath,
+      }),
+  },
+  {
+    name: "operations.vote",
+    summary: "Trigger leader re-election on a follower node",
+    category: "system",
+    input: z.object({}),
+    execute: async (client) => api(client).post("/operations/vote"),
+  },
+  {
+    name: "operations.cache.clear",
+    summary: "Clear cached search responses",
+    category: "system",
+    input: z.object({}),
+    execute: async (client) => api(client).post("/operations/cache/clear"),
+  },
+  {
+    name: "operations.db.compact",
+    summary: "Compact the on-disk Typesense database",
+    category: "system",
+    input: z.object({}),
+    execute: async (client) => api(client).post("/operations/db/compact"),
+  },
+  {
+    name: "operations.slow_requests.configure",
+    summary: "Configure the slow-request logging threshold",
+    category: "system",
+    input: z.object({ thresholdMs: z.number().int().min(-1) }),
+    execute: async (client, input) =>
+      api(client).post("/config", {
+        "log-slow-requests-time-ms": input.thresholdMs,
+      }),
+  },
+  {
     name: "health",
     summary: "Check Typesense cluster health",
     category: "system",

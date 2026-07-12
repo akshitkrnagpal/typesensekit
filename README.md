@@ -128,7 +128,7 @@ TypesenseKit covers the common Typesense administration and search surfaces, plu
 | Access | API keys |
 | Analytics | rules and events |
 | AI search | natural-language search models, conversation models and history |
-| System | health, metrics, stats, debug |
+| System | health, metrics, stats, debug, schema-change status, snapshot, vote, cache clear, database compaction, slow-request logging |
 | Escape hatch | raw HTTP calls through `api.call` |
 
 Typesense v30 global synonym sets are available through `synonym_sets.*`:

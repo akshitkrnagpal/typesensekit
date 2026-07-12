@@ -12,6 +12,7 @@ const operations = [
   { name: "curation_sets.items.retrieve" },
   { name: "stemming.dictionaries.list" },
   { name: "nl_search_models.retrieve" },
+  { name: "operations.schema_changes" },
   { name: "documents.index" },
   { name: "collections.delete" },
   { name: "keys.retrieve" },
@@ -31,6 +32,7 @@ describe("MCP read-only operation filtering", () => {
       "curation_sets.items.retrieve",
       "stemming.dictionaries.list",
       "nl_search_models.retrieve",
+      "operations.schema_changes",
     ]);
   });
 
