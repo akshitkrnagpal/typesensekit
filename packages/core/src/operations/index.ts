@@ -9,6 +9,7 @@ import { keysOperations } from "./keys.js";
 import { overridesOperations } from "./overrides.js";
 import { presetsOperations } from "./presets.js";
 import { searchOperations } from "./search.js";
+import { stemmingOperations } from "./stemming.js";
 import { stopwordsOperations } from "./stopwords.js";
 import { synonymSetOperations } from "./synonym-sets.js";
 import { synonymsOperations } from "./synonyms.js";
@@ -28,6 +29,7 @@ export const operations = [
   ...analyticsOperations,
   ...presetsOperations,
   ...stopwordsOperations,
+  ...stemmingOperations,
   ...conversationOperations,
   ...apiOperations,
   ...systemOperations,

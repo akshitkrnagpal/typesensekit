@@ -115,6 +115,15 @@ const EXAMPLES: Record<string, JsonValue[]> = {
       limit: 5,
     },
   ],
+  "stemming.dictionaries.import": [
+    {
+      id: "irregular-plurals",
+      words: [
+        { word: "people", root: "person" },
+        { word: "children", root: "child" },
+      ],
+    },
+  ],
   "presets.create": [
     {
       name: "Semantic",

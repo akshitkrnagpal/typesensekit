@@ -124,7 +124,7 @@ TypesenseKit covers the common Typesense administration and search surfaces, plu
 | Collections | list, get, create, update, delete, schema changes |
 | Documents | index, upsert, get, get many, update, delete, import, export, search |
 | Search | search, multi-search, facet exploration, suggestions |
-| Configuration | aliases, global synonym and curation sets, legacy collection overrides/synonyms, stopwords, presets |
+| Configuration | aliases, global synonym and curation sets, legacy collection overrides/synonyms, stopwords, stemming dictionaries, presets |
 | Access | API keys |
 | Analytics | rules and events |
 | Conversations | models and history |
@@ -143,6 +143,13 @@ Typesense v30 global curation sets are available through `curation_sets.*`:
 ```sh
 tsk curation_sets.list --input '{}' --json
 tsk curation_sets.items.list --input '{"name":"products-core"}' --json
+```
+
+Custom stemming dictionaries are available through `stemming.dictionaries.*`:
+
+```sh
+tsk stemming.dictionaries.list --input '{}' --json
+tsk stemming.dictionaries.import --input dictionary.json --json
 ```
 
 ## Why It Exists
