@@ -1,6 +1,11 @@
 # @typesensekit/cli
 
-CLI for Typesense API operations, profile management, and agent skill snippets.
+An open-source Typesense CLI for collections, documents, schemas, search,
+configuration, and cluster administration.
+
+**[Typesense CLI overview](https://typesensekit.vercel.app/typesense-cli/)** ·
+**[Complete CLI guide](https://typesensekit.vercel.app/guides/cli/)** ·
+**[GitHub](https://github.com/akshitkrnagpal/typesensekit)**
 
 ```sh
 pnpm add -g @typesensekit/cli
@@ -40,4 +45,5 @@ tsk collections.list --input '{}'
 tsk skills mcp
 ```
 
-See the root README for operation coverage and development docs.
+See the [API coverage inventory](https://github.com/akshitkrnagpal/typesensekit/blob/main/docs/api-coverage.md)
+for supported Typesense operations.

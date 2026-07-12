@@ -1,7 +1,13 @@
 # @typesensekit/mcp
 
-MCP stdio server exposing Typesense API operations as tools. It runs in
-read-only mode by default for assistant use cases.
+An open-source Typesense MCP server that gives AI agents structured tools for
+search, schema inspection, collection operations, and cluster administration.
+It runs in read-only mode by default.
+
+**[Typesense MCP overview](https://typesensekit.vercel.app/typesense-mcp/)** ·
+**[Client setup](https://typesensekit.vercel.app/guides/clients/)** ·
+**[Security guide](https://typesensekit.vercel.app/guides/mcp/)** ·
+**[GitHub](https://github.com/akshitkrnagpal/typesensekit)**
 
 ```sh
 TYPESENSE_URL=http://localhost:8108 TYPESENSE_API_KEY=xyz pnpm dlx @typesensekit/mcp
@@ -15,5 +21,5 @@ Run the stateless Streamable HTTP server:
 TYPESENSE_URL=http://localhost:8108 TYPESENSE_API_KEY=xyz pnpm dlx --package @typesensekit/mcp typesensekit-mcp-http
 ```
 
-See the root README for client configuration, MCP resources, security guidance,
-and operation coverage.
+See the [API coverage inventory](https://github.com/akshitkrnagpal/typesensekit/blob/main/docs/api-coverage.md)
+for supported Typesense operations.
