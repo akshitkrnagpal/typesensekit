@@ -1,5 +1,16 @@
 # @typesensekit/mcp
 
+## 1.2.0
+
+### Minor Changes
+
+- 71373eb: Add first-class Typesense cluster operations for schema status, snapshots, leader election, cache clearing, database compaction, and slow-request logging.
+- 3859593: Add first-class Typesense v30 global curation set and curation item operations.
+- b9ca3a8: Add first-class natural-language search model management and redact provider token and client-secret fields.
+- fcd42e1: Add first-class operations for listing, retrieving, and importing Typesense stemming dictionaries.
+- c72997f: Add current analytics rule creation and filtering, event retrieval, status, and flush operations.
+- 7ef1669: Declare Typesense v30.2 compatibility and add registry-generated API coverage documentation.
+
 ## 1.1.3
 
 ### Patch Changes
