@@ -1,5 +1,14 @@
 # @typesensekit/cli
 
+## 1.1.3
+
+### Patch Changes
+
+- 6b1e5a3: Remove unsupported collection-scoped preset inputs and always use Typesense's global preset routes.
+- a935f46: Fix stopword operations to use Typesense's global `/stopwords` API routes.
+- 0b10ca9: Write profile configuration atomically with secure permissions and honor explicit profile selection ahead of environment credentials.
+- dbb63a1: Update the locked production dependency graph to patched Axios, form-data, Hono, and qs releases.
+
 ## 1.1.2
 
 ### Patch Changes
