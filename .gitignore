@@ -7,4 +7,5 @@ coverage
 !.env.example
 .turbo
 .vite
+.astro
 *.log

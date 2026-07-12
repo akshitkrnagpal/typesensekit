@@ -3,100 +3,111 @@
 ![TypesenseKit GitHub hero banner](./assets/github-hero.png)
 
 [![CI](https://github.com/akshitkrnagpal/typesensekit/actions/workflows/ci.yml/badge.svg)](https://github.com/akshitkrnagpal/typesensekit/actions/workflows/ci.yml)
+[![CLI on npm](https://img.shields.io/npm/v/@typesensekit/cli?label=CLI)](https://www.npmjs.com/package/@typesensekit/cli)
+[![MCP on npm](https://img.shields.io/npm/v/@typesensekit/mcp?label=MCP)](https://www.npmjs.com/package/@typesensekit/mcp)
+[![MIT License](https://img.shields.io/badge/license-MIT-18d2d0)](./LICENSE)
 
-TypesenseKit is the developer toolkit for operating Typesense from terminals and AI agents. It gives you one typed operation registry, a human-friendly CLI, and an MCP stdio server over the same Typesense Admin API surface.
+## Operate Typesense from your terminal or AI agent
 
-Use it when you want repeatable Typesense automation without rebuilding small scripts for every collection, import, search, schema update, or agent workflow.
+TypesenseKit gives operators, automation, and AI agents one typed operation registry for the Typesense Admin API—with a human-friendly CLI and a secure MCP server built on top.
 
-## What You Get
+**[Website](https://typesensekit.vercel.app)** · **[CLI guide](https://typesensekit.vercel.app/guides/cli/)** · **[MCP guide](https://typesensekit.vercel.app/guides/mcp/)** · **[Client setup](https://typesensekit.vercel.app/guides/clients/)**
 
-- [`@typesensekit/cli`](https://www.npmjs.com/package/@typesensekit/cli): a `tsk` command for profile-aware Typesense operations, raw API calls, and agent config snippets.
-- [`@typesensekit/mcp`](https://www.npmjs.com/package/@typesensekit/mcp): an MCP stdio server that exposes Typesense operations as tools for compatible agents.
-- `@typesensekit/core`: the private shared client, operation registry, validation layer, and redaction utilities used by both public packages.
+```sh
+pnpm add -g @typesensekit/cli
 
-## Quick Start
+# Securely prompts for the API key
+tsk profile add local --url http://localhost:8108
+tsk profile use local
 
-Install the CLI:
+# Discover the input, then run the operation
+tsk documents.search --examples
+tsk documents.search --input '{"collection":"products","params":{"q":"oak chair","query_by":"title"}}' --json
+```
+
+## Why TypesenseKit
+
+Typesense work often jumps between dashboards, one-off scripts, local curl commands, and agent experiments. TypesenseKit keeps those workflows on one predictable surface:
+
+- Use the same operation names from the CLI and MCP server.
+- Validate structured inputs before requests reach Typesense.
+- Get readable terminal output or stable, redacted JSON for scripts.
+- Keep secrets out of shell history with secure prompts, stdin, or macOS Keychain profiles.
+- Confirm destructive CLI operations before they run.
+- Give AI clients read-only tools by default, then opt in to writes deliberately.
+- Reach newer or uncommon endpoints through the raw `api.call` escape hatch.
+
+| | One-off scripts | Typesense client | Basic MCP wrapper | TypesenseKit |
+| --- | --- | --- | --- | --- |
+| Terminal-first workflow | Manual | — | — | Built in |
+| MCP tools | — | — | Yes | Yes |
+| Shared CLI/MCP operations | — | — | Varies | Yes |
+| Safe operational defaults | You build them | Application-owned | Varies | Read-only + confirmations |
+
+Use the official Typesense client in application code. Use TypesenseKit when humans, scripts, and agents need to perform the same operational work.
+
+## CLI
+
+Install the public CLI package:
 
 ```sh
 pnpm add -g @typesensekit/cli
 ```
 
-Create and use a profile:
+Create a profile interactively, pipe a key over stdin for automation, or use macOS Keychain:
 
 ```sh
-# Securely prompts for the API key without adding it to shell history
+# Interactive secure prompt
 tsk profile add local --url http://localhost:8108
 
-# For scripts, pipe the key over stdin
-printf '%s' "$TYPESENSE_API_KEY" | tsk profile add ci --url https://typesense.example.com --api-key-stdin
+# Scripted setup without putting the key in argv or shell history
+printf '%s' "$TYPESENSE_API_KEY" | tsk profile add ci \
+  --url https://search.example.com --api-key-stdin
 
-# On macOS, keep the secret in Keychain instead of config.json
-tsk profile add production --url https://typesense.example.com --keychain
-tsk profile use local
-tsk collections.list --input '{}'
+# Keychain-backed profile on macOS
+tsk profile add production --url https://search.example.com --keychain
 ```
 
-Or run without a saved profile:
-
-```sh
-TYPESENSE_URL=http://localhost:8108 TYPESENSE_API_KEY=xyz tsk health --input '{}'
-```
-
-List every supported operation:
+Every operation supports generated schemas and examples. Common results render as tables; pass `--json` for stable automation output.
 
 ```sh
 tsk operations
-```
-
-Inspect an operation's input shape before running it:
-
-```sh
+tsk collections.list --input '{}'
 tsk documents.search --schema
 tsk documents.search --examples
+tsk collections.list --input '{}' --json
 ```
 
-Search parameters are passed inside the top-level `params` object:
+Enable shell completion:
 
 ```sh
-tsk documents.search --input '{"collection":"production__products","params":{"q":"*","query_by":"q"}}' --json
+source <(tsk completion zsh)
+source <(tsk completion bash)
+tsk completion fish | source
 ```
+
+Read the **[complete CLI guide](https://typesensekit.vercel.app/guides/cli/)** for profiles, environment-only use, JSON input, completion, and destructive-operation behavior.
 
 ## MCP Server
 
-Run the MCP stdio server directly. MCP tools are read-only by default, so the
-assistant surface includes search, document reads, collection metadata, and
-status checks without write/delete/admin operations.
+Run the stdio server directly. It exposes search, reads, collection metadata, configuration reads, and system status operations by default.
 
 ```sh
-TYPESENSE_URL=http://localhost:8108 TYPESENSE_API_KEY=xyz pnpm dlx @typesensekit/mcp
+TYPESENSE_URL=http://localhost:8108 \
+TYPESENSE_API_KEY=xyz \
+pnpm dlx @typesensekit/mcp
 ```
 
-To expose the full operation registry, including writes, deletes, key
-management, and raw `api.call`, opt in explicitly:
+Write, delete, key-management, and raw API tools stay hidden unless full access is explicitly enabled:
 
 ```sh
-TYPESENSEKIT_READ_ONLY=false TYPESENSE_URL=http://localhost:8108 TYPESENSE_API_KEY=xyz pnpm dlx @typesensekit/mcp
+TYPESENSEKIT_READ_ONLY=false \
+TYPESENSE_URL=http://localhost:8108 \
+TYPESENSE_API_KEY=xyz \
+pnpm dlx @typesensekit/mcp
 ```
 
-Claude Desktop example:
-
-```json
-{
-  "mcpServers": {
-    "typesensekit": {
-      "command": "npx",
-      "args": ["-y", "@typesensekit/mcp"],
-      "env": {
-        "TYPESENSE_URL": "http://localhost:8108",
-        "TYPESENSE_API_KEY": "xyz"
-      }
-    }
-  }
-}
-```
-
-Generate copy-ready integration snippets from the CLI:
+Generate client configuration from the CLI:
 
 ```sh
 tsk skills mcp
@@ -105,76 +116,35 @@ tsk skills claude-code
 tsk skills hermes
 ```
 
-For scoped key examples, production guidance, and the compatibility matrix, read
-[`docs/mcp-security.md`](./docs/mcp-security.md).
+See the **[MCP guide](https://typesensekit.vercel.app/guides/mcp/)** and **[client setup guide](https://typesensekit.vercel.app/guides/clients/)** for Claude Desktop, Claude Code, Codex, Cursor, generic MCP clients, Streamable HTTP, and Docker.
 
-For Streamable HTTP, Docker, and deployment examples, read
-[`docs/mcp-http-docker.md`](./docs/mcp-http-docker.md). For an end-to-end
-assistant search flow with citations, read
-[`examples/assistant-search-citations.md`](./examples/assistant-search-citations.md).
-
-The MCP server also exposes resources:
+### MCP resources
 
 | Resource | Purpose |
 | --- | --- |
-| `typesensekit://operations` | JSON manifest of operations exposed by the current MCP mode |
-| `typesensekit://read-only-tools` | JSON list of tools included in default read-only mode |
+| `typesensekit://operations` | Operations exposed by the current MCP mode |
+| `typesensekit://read-only-tools` | Tools included in the default read-only mode |
 | `typesense://collections/{collection}/schema` | Collection schema lookup |
 | `typesense://collections/{collection}/documents/{id}` | Document lookup |
 
-## API Coverage
+## What You Can Operate
 
-TypesenseKit targets the Typesense v30.2 API for current first-class operations, plus `api.call` for endpoints that are new, uncommon, or not yet wrapped. The detailed operation inventory is generated from the shared registry in [`docs/api-coverage.md`](./docs/api-coverage.md).
+TypesenseKit targets the Typesense v30.2 API for current first-class operations:
 
-| Area | Operations |
-| --- | --- |
-| Collections | list, get, create, update, delete, schema changes |
-| Documents | index, upsert, get, get many, update, delete, import, export, search |
-| Search | search, multi-search, facet exploration, suggestions |
-| Configuration | aliases, global synonym and curation sets, v27-v29 collection overrides/synonyms, stopwords, stemming dictionaries, presets |
-| Access | API keys |
-| Analytics | rule create/update/filter, event create/retrieve, status and flush |
-| AI search | natural-language search models, conversation models and history |
-| System | health, metrics, stats, debug, schema-change status, snapshot, vote, cache clear, database compaction, slow-request logging |
-| Escape hatch | raw HTTP calls through `api.call` |
+- Collections, schema changes, documents, imports, exports, search, multi-search, facets, and suggestions
+- Aliases, presets, global synonym and curation sets, stopwords, stemming dictionaries, and legacy collection configuration
+- API keys, analytics rules and events, natural-language search models, conversations, and conversation history
+- Health, metrics, stats, debug information, snapshots, slow-request logging, database maintenance, and other system operations
 
-Typesense v30 global synonym sets are available through `synonym_sets.*`:
+The generated **[API coverage inventory](./docs/api-coverage.md)** is the source of truth for operation names and compatibility notes. Use `api.call` for endpoints that are new, uncommon, or not yet wrapped.
 
-```sh
-tsk synonym_sets.list --input '{}' --json
-tsk synonym_sets.items.list --input '{"name":"products-core"}' --json
-```
+## Security
 
-Typesense v30 global curation sets are available through `curation_sets.*`:
+Typesense administration touches data and credentials. Keep the MCP server read-only for assistant-facing deployments, use narrowly scoped Typesense keys, and protect any Streamable HTTP deployment with authentication and network controls.
 
-```sh
-tsk curation_sets.list --input '{}' --json
-tsk curation_sets.items.list --input '{"name":"products-core"}' --json
-```
-
-Custom stemming dictionaries are available through `stemming.dictionaries.*`:
-
-```sh
-tsk stemming.dictionaries.list --input '{}' --json
-tsk stemming.dictionaries.import --input dictionary.json --json
-```
-
-Natural-language search models are available through `nl_search_models.*`:
-
-```sh
-tsk nl_search_models.list --input '{}' --json
-tsk nl_search_models.create --input model.json --json
-```
-
-## Why It Exists
-
-Typesense work often jumps between dashboards, one-off scripts, local curl commands, and agent experiments. TypesenseKit keeps those workflows on one command and one tool registry:
-
-- Use the same operation names from the CLI and MCP server.
-- Keep API keys out of command history with saved profiles or environment variables.
-- Get structured input validation before requests hit Typesense.
-- Redact secrets in error output.
-- Fall back to raw API calls when Typesense ships faster than the wrappers.
+- [MCP security and production guidance](./docs/mcp-security.md)
+- [Streamable HTTP and Docker](./docs/mcp-http-docker.md)
+- [Assistant search with citations](./examples/assistant-search-citations.md)
 
 ## Development
 
@@ -184,7 +154,7 @@ pnpm install
 pnpm check
 ```
 
-Run local Typesense:
+Run a local Typesense server:
 
 ```sh
 docker run -p 8108:8108 \
@@ -193,35 +163,14 @@ docker run -p 8108:8108 \
   typesense/typesense:30.2 --enable-cors
 ```
 
-Useful scripts:
+Run the landing page locally:
 
 ```sh
-pnpm lint
-pnpm typecheck
-pnpm test
-pnpm build
-pnpm pack:dry
+pnpm dev:web
 ```
 
-## Repository Assets
-
-- README banner: [`assets/github-hero.png`](./assets/github-hero.png)
-- GitHub social preview image: [`assets/github-og.png`](./assets/github-og.png)
-
-Use `assets/github-og.png` as the repository social preview in GitHub settings.
-
-## Releasing
-
-```sh
-pnpm changeset
-pnpm changeset version
-pnpm release
-```
-
-## Contributing
-
-Read [`CONTRIBUTING.md`](./CONTRIBUTING.md) for setup, development rules, and release notes.
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for development and release rules.
 
 ## License
 
-MIT
+[MIT](./LICENSE)
